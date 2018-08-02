@@ -1,0 +1,118 @@
+
+hush
+
+cps 1.2
+d1 $ striate (irand 3) $  s "bd hc sn:2 hc" # nudge "[0 0.04]*4"
+d1 $ silence
+hush
+let (modFreq, _) = pI "modFreq" (Just 100)
+let (modAmount, _) = pI "modAmount" (Just 100)
+d2 $ slow 2 $  n "0 [~ 0 0] [~ 12] [12 ~] ~ ~ ~ ~ " # modFreq (20 + irand 20) # modAmount 400 # pan rand # gain 1.0 # sound "fmshuffle"
+d2 $ silence
+
+
+let (delayTime, _) = pI "delayTime" (Just 100)
+let (kRand, _) = pF "kRand" (Just 100)
+
+
+d2 $ slow 2 $  n "0*32" # gain 0.5 # sound "ksg" # kRand (slow 14 $ ((sine1*2)+(irand 2))) # delayTime (irand 4000) # gain 0.47 # pan rand
+
+
+
+let (sinfreq, _) = pF "sinfreq" (Just 100)
+let (att, _) = pF "att" (Just 100)
+let (glissf, _) = pF "glissf" (Just 100)
+d2 $ slow 1 $  n "-0(7,8)?" # sound "kick" # sinfreq (irand 1000) # glissf (slow 16 $ sine1*(irand 50)) # gain (slow 11 $ sine1 + 0.5) # shape (slow 5 $ sine1)
+d2 $ n "[24(3,8) , 44(4,9), -24(7,8)]" # sound "kick"
+d2 $ silence
+
+let (rel, _) = pF "rel" (Just 100)
+let (ffreq, _) = pI "ffreq" (Just 100)
+d3 $ n "52*8" # sound "hihat" # att (slow 14 $ sine1*0.5)  # rel (slow 13 $ sine1*2) # ffreq (irand 10000) # pan (slow 31 $ tri1)
+d3 $ n "52*8" # sound "hihat" # att (slow 14 $ sine1*0.5)  # rel (slow 13 $ sine1*2) # ffreq (irand 100) # pan (slow 31 $ tri1)
+d3 $ silence
+
+d1 $ slow 1 $  n "12 -24 -12 0" # sound "snare" # ffreq (irand 10000) # att (slow 17 $ sine1*0.5) # gain 1.2 # nudge "[0 0.4]*4"
+d1 $ silence
+--------------------------------------
+-- Structure playground
+
+let vs1 = d2 $ slow 1 $  n "-0(7,8)?" # sound "kick" # sinfreq (irand 1000) # glissf (slow 16 $ sine1*(irand 50)) # gain (slow 11 $ sine1 + 0.5)
+t2 mortal $ vs1
+
+hush
+d2 $ degradeBy 0.015 $ juxBy 0.5 ((# speed "0.25") . rev )  $ n "8*2 0*4 -1000*2 [-777*1 -9*3]*8" # s "arpy"
+d2 $ degradeBy 0.015 $ juxBy 0.5 ((# speed "0.25") . rev )  $ n "8*8 0*4 -1000*2 [-777/6 -9/7]*2" # s "arpy"
+d2 $ degradeBy 0.015 $ juxBy 0.5 ((# speed "0.25") . rev )  $ n "8*8 0*4 -10*2 [-777/6 -9/7]" # s "arpy"
+d2 $ degradeBy 0.045 $ juxBy 0.5 ((# speed "0.25") . rev )  $ n "8*8 [-24]*4 -1000*2 [-777/6 -9/7]" # s "arpy"
+d2 $ degradeBy 0.045 $ juxBy 0.5 ((# speed "0.25") . rev )  $ n "7*8 [-14]*4 -1100*2 [-765*3 -9]" # s "arpy"
+d2 $ degradeBy 0.845 $ juxBy 0.5 ((# speed "0.25") . rev )  $ n "5*6 [-14]*4 -1100*2 [-765*3 -9]" # s "arpy"
+
+d2 $ degradeBy 0.865 $ juxBy 0.5 ((# speed "0.25") . rev )  $ n "8*8 -12*6 -100*2 [-77/3 -9/7]" # s "arpy"
+d2 $ silence
+
+t1 (mortal 8 $ s "sn(3,8)")
+hush
+cps (-1)
+cps 1.2
+d1 $ seqPLoop [
+  (0, 16, slow 2 $  n "-12(7,8)?" # sound "kick" # sinfreq (irand 1000) # glissf (slow 16 $ sine1*(irand 50)) # gain (slow 11 $ sine1 + 1)),
+  (0, 20, striate (irand 3) $  s "bd hc sn:2 hc"),
+  (16, 20, n "[24(3,8) , 44(4,9), -24(7,8)]" # sound "kick")
+]
+hush
+
+
+let st180801 = stack [ sound "bd bd*2",   sound "hh*2 [sn cp] cp future*4",   sound (samples "arpy*8" (run 16))]
+
+
+d1 $ st180801
+
+d1 $ s "cp(3,8)"
+t1 (mortal 8 360) $ juxBy 0.5 ((# speed "0.25") . rev )  $ n "8*2 0*4 -1000*2 [-777*1 -9*3]*8" # s "arpy"
+
+t1 (mortal 4 360) $ whenmod 5 3 (striate 3) $ st180801 # speed "[[1 0.8], [1.5 2]*2]/3"
+
+
+--------------------------------------
+-- Structure playground
+hush
+
+--sanity check - can we get sound?
+d1 $ striate (irand 3) $  s "bd hc sn:2 hc" # nudge "[0 0.04]*4"
+
+
+--synth settings
+--kick
+let (sinfreq, _) = pF "sinfreq" (Just 100)
+let (att, _) = pF "att" (Just 100)
+let (glissf, _) = pF "glissf" (Just 100)
+--hihat
+let (rel, _) = pF "rel" (Just 100)
+let (ffreq, _) = pI "ffreq" (Just 100)
+
+
+--     it would be nice to be able to specify components of a pattern like this so we could compose them:
+--let ppre = degradeBy 0.015 $ juxBy 0.5 ((# speed "0.25") . rev )
+--     not working yet!
+
+let pp1 = degradeBy 0.045 $ juxBy 0.5 ((# speed "0.25") . rev )  $ n "8*8 [-24]*4 -1000*2 [-777/6 -9/7]" # s "arpy"
+let pp2 = degradeBy 0.045 $ juxBy 0.5 ((# speed "0.25") . rev )  $ n "7*8 [-14]*4 -1100*2 [-765*3 -9]" # s "arpy"
+--d2 $ pp1
+--d2 $ pp2
+
+let phh1 = n "52*8" # sound "hihat" # att (slow 14 $ sine1*0.5)  # rel (slow 13 $ sine1*2) # ffreq (irand 10000) # pan (slow 31 $ tri1)
+let psn1 = slow 1 $  n "-24 -12 0 12" # sound "snare" # ffreq (irand 10000) # att (slow 17 $ sine1*0.5) # gain 1.2 # nudge "[0 0.4]*4"
+--d3 $ stack [phh1, stack[psn1, lp1]]
+
+let lp1 = seqPLoop [(0, 8, pp1),(8, 12, pp2)]
+let lp2 = seqPLoop [(0,56,phh1),(0,56,psn1),(8,56,lp1)]
+
+hush
+cps (-1)
+t1 (mortal 180 180) $  lp2
+cps 1.2
+
+--alternative using a xfadeIn: - DOESN'T Seem to have the desired effect
+--d1 $ degradeBy 1.0 $ lp2
+--t1 (xfadeIn 180) $ lp2
