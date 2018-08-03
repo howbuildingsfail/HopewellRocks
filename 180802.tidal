@@ -28,11 +28,11 @@ d2 $ silence
 
 let (rel, _) = pF "rel" (Just 100)
 let (ffreq, _) = pI "ffreq" (Just 100)
-d3 $ n "52*8" # sound "hihat" # att (slow 14 $ sine1*0.5)  # rel (slow 13 $ sine1*2) # ffreq (irand 10000) # pan (slow 31 $ tri1)
+d3 $ n "12*2" # sound "hihat" # att (slow 14 $ sine1*0.5)  # rel (slow 13 $ sine1*2) # ffreq (irand 10000) # pan (slow 31 $ tri1)
 d3 $ n "52*8" # sound "hihat" # att (slow 14 $ sine1*0.5)  # rel (slow 13 $ sine1*2) # ffreq (irand 100) # pan (slow 31 $ tri1)
 d3 $ silence
 
-d1 $ slow 1 $  n "12 -24 -12 0" # sound "snare" # ffreq (irand 10000) # att (slow 17 $ sine1*0.5) # gain 1.2 # nudge "[0 0.4]*4"
+d1 $ slow 4 $  n "[~ -24] [~ -12] [~ 0] [~ 12] " # sound "snare" # ffreq (irand 10000) # att (slow 17 $ sine1*0.5) # gain 1.2 # nudge "[0 0.4]*4"
 d1 $ silence
 --------------------------------------
 -- Structure playground
@@ -41,12 +41,12 @@ let vs1 = d2 $ slow 1 $  n "-0(7,8)?" # sound "kick" # sinfreq (irand 1000) # gl
 t2 mortal $ vs1
 
 hush
-d2 $ degradeBy 0.015 $ juxBy 0.5 ((# speed "0.25") . rev )  $ n "8*2 0*4 -1000*2 [-777*1 -9*3]*8" # s "arpy"
-d2 $ degradeBy 0.015 $ juxBy 0.5 ((# speed "0.25") . rev )  $ n "8*8 0*4 -1000*2 [-777/6 -9/7]*2" # s "arpy"
-d2 $ degradeBy 0.015 $ juxBy 0.5 ((# speed "0.25") . rev )  $ n "8*8 0*4 -10*2 [-777/6 -9/7]" # s "arpy"
-d2 $ degradeBy 0.045 $ juxBy 0.5 ((# speed "0.25") . rev )  $ n "8*8 [-24]*4 -1000*2 [-777/6 -9/7]" # s "arpy"
-d2 $ degradeBy 0.045 $ juxBy 0.5 ((# speed "0.25") . rev )  $ n "7*8 [-14]*4 -1100*2 [-765*3 -9]" # s "arpy"
-d2 $ degradeBy 0.845 $ juxBy 0.5 ((# speed "0.25") . rev )  $ n "5*6 [-14]*4 -1100*2 [-765*3 -9]" # s "arpy"
+d2 $ degradeBy 0.2 $ juxBy 0.5 ((# speed "0.25") . rev )  $ n "8*2 0*4 -1000*2 [-777*1 -9*3]*8" # s "arpy"
+d2 $ degradeBy 0.1 $ juxBy 0.5 ((# speed "0.25") . rev )  $ n "8*8 0*4 -1000*2 [-777/6 -9/7]*2" # s "arpy"
+d2 $ degradeBy 0.1 $ juxBy 0.75 ((# speed "0.25") . rev . fast (4.2 + (0.03 * (irand 10))))  $ n "8*8 0*4 -10*2 [-777/6 -9/7]" # s "arpy"
+d2 $ degradeBy 0.05 $ juxBy 0.75 ((# up "c3") . rev . fast 5.2 )  $ n "8*8 -24*4 66*4 [-777/3 -9/3]" # s "arpy"
+d2 $ degradeBy 0.1 $ juxBy 0.75 ((# speed "0.25") . rev . fast 5.5)  $ n "7*8 [-14]*4 -1100*2 [-765*3 -9]" # s "arpy"
+d2 $ degradeBy 0.05 $ juxBy 0.5 ((# speed "0.25") . rev )  $ n "5*6 [-14]*4 -1100*2 [-765*3 -9]" # s "arpy"
 
 d2 $ degradeBy 0.865 $ juxBy 0.5 ((# speed "0.25") . rev )  $ n "8*8 -12*6 -100*2 [-77/3 -9/7]" # s "arpy"
 d2 $ silence
@@ -64,14 +64,12 @@ hush
 
 
 let st180801 = stack [ sound "bd bd*2",   sound "hh*2 [sn cp] cp future*4",   sound (samples "arpy*8" (run 16))]
-
-
 d1 $ st180801
 
 d1 $ s "cp(3,8)"
-t1 (mortal 8 360) $ juxBy 0.5 ((# speed "0.25") . rev )  $ n "8*2 0*4 -1000*2 [-777*1 -9*3]*8" # s "arpy"
+t1 (mortal 8 360) $ juxBy 0.5 ((# up "a2") . rev )  $  n "8*2 0*4 -1000*2 [-777*1 -9*3]*8"  # s "arpy"
 
-t1 (mortal 4 360) $ whenmod 5 3 (striate 3) $ st180801 # speed "[[1 0.8], [1.5 2]*2]/3"
+t1 (mortal 4 36) $ whenmod 5 3 (striate 3) $ st180801 # speed "[[1 0.8], [1.5 2]*2]/3"
 
 
 --------------------------------------
