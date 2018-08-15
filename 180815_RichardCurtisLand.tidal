@@ -1,0 +1,33 @@
+{-- LYRICS
+
+Finished my 7.5 hrs wall staring
+beep beep beep Beeped my way to the Bike Rack
+Clipped on my superbrite LED illuminations
+made  my way home down the track
+After food a movie
+Time to relax and unwind
+what am i streming what am i watching?
+10 minutes later and I find (im in)
+
+Richard Curtis land
+don't swear in anger
+Richard Curtis Land
+The beautiful girl is a vacuum
+
+noone ever says "yes but I've got to go to work"
+
+
+
+
+
+
+--ENDING--
+
+Test card from 30 years ago
+woke me from my slumber
+
+--}
+
+cps 0.5
+d1 $  every 4 (striate 4) $ stack [ n "[4 16] [-12 -5] " # s "kick", n "[~ 4 ~]*2" # s "snare"]
+d2  $ slow 3 $ n "e ~ e2 ~ ~ e1*2 e1*2" # s "arpy" # speed 0.4

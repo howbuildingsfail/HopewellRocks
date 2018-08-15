@@ -1,0 +1,91 @@
+
+
+{-
+this will all be factories
+overrun with weeds and asbestos
+I don't want to dwell on it
+any further than I have to but
+it's no use:
+
+The future crushes now
+
+
+knees, teeth, lower intestines
+
+100% duty cycles
+
+
+
+
+
+
+-}
+
+hush
+
+cps 0.52
+
+  d1 $ every 12 (iter 7) $ stack[   n "-34 ~ -34 ~ -12 ~ ~" # sound "kick" # glissf 0.1 # rel (slow 11 $ sine1*0.5) # amp 1 ,
+              shuffle 7 $ n  "~ 13 ~ -23 ~ 43 63 " # sound "snare" # att (slow 7 $ scale 0.02 0.05 $ rand) # rel (scale 0.01 0.125 $ rand) # amp 0.8,
+              n "6*14" # sound "hihat" # ffreq (irand 10000) # rel (scale 0.01 0.5 $ rand) # amp 0.65
+              ]# pan rand
+
+d1 $ stack[   n "-24 ~ -24 ~ -12 ~ ~" # sound "kick" # glissf (slow 5 $ scale 0.02 0.5 $ rand) # rel (slow 11 $ sine1*0.95) # amp 1 ,
+            midinote  "~ 13 ~ -23 ~ 43 63 " # sound "snare" # att (slow 7 $ scale 0.02 0.05 $ rand) # rel (slow 13 $ scale 0.01 0.125 $ rand) # amp 0.8,
+            n "6*14" # sound "hihat" # ffreq (irand 10000) # rel (scale 0.01 0.5 $ rand) # amp 0.65
+            ]# pan rand
+
+
+
+d1 $ silence
+
+let (modFreq, _) = pI "modFreq" (Just 100)
+let (modAmount, _) = pI "modAmount" (Just 100)
+
+let fms1 =  degradeBy 0.2 $ fast 2 $ up "-54 -50 -34 -49 -49 7 19" # s "fmshuffle" # end (slow 7 $ scale 0.01 0.15 $ sine1) # modFreq (irand 1000) -- # modAmount (slow 40 $ rand1 100)
+d2 $ fms1
+d2 $ seqPLoop[
+  (0,16,fms1),
+  (16,32,s "a")
+]
+d2 $ silence
+
+
+-- imp psin gabor cyclo all work well
+d3 $ n "[-48 -24 -18 -12 -6 0 6]*2" # s "pmsin" #  sustain (slow 9 $ sine1) # modFreq (slow 13 $ irand 100)
+-- This is worth something on it's own!:
+d3 $ slow 2 $ n "[-39(13,21),1(5,7),17(3,14)]" # s "psin" #  sustain (slow 9 $ 0.1 + (sine1 * 0.5))
+d3 $ slow 2 $ n "[-39(13,21),1(5,7),20(3,9)]" # s "psin" #  sustain (slow 9 $ 0.1 + (sine1 * 0.5)) # modFreq ( irand 1000)
+d3 $ slow 2 $ n "[-24(13,21),8(5,7),17(3,14)]" # s "psin" #  sustain (slow 9 $ 0.1 + (sine1 * 0.5)) # modFreq ( irand 1000)
+d3 $ slow 2 $ n "[-24(13,21),8(5,7),17(3,14)]" # s "pmsin" #  sustain (slow 9 $ 0.1 + (sine1 * 0.5)) # modFreq ( irand 1000)
+d3 $ silence
+d1 $ every 20 (fast 18) $ slow 2 $ s "[[kick ~ ~]*7,[~ snare]*3, hihat*21]" # n "-9 70" # rel (slow 4 $ scale 0.1 0.5 sine1) # glissf (slow 5 $ scale 0.02 0.9 sine1) # rel (slow 11 $ sine1*0.95) # amp 1
+
+hush
+
+
+let (dampen, _) = pF "dampen" (Just 100)
+d3 $ n "[-48 -36 -24 -12]*2" # s "plucking" #  sustain 0.5  # dampen (slow 6 $ sine1 *0.5)
+
+let (vibratoDepth, _) = pF "vibratoDepth" (Just 100)
+let (vibratoSpeed, _) = pF "vibratoSpeed" (Just 100)
+d2 $ stack [n "-24*2 -9", n "-19 -10" , n "-17 -7"] # s "fovo" #  vibratoDepth 12 # vibratoSpeed 32
+d2 $ slow 4 $ stack [n "-14*5" , n "[-6 -50, 9]*4" , n "[5 66]*6" ] # s "fovo"  #  vibratoDepth (6 + irand 12) #  vibratoDepth (100 /(1+ irand 12)) # pan (slow 6 $ sine1)
+
+hush
+
+"Steve Buscemie" !! 6
+
+
+--------------------------------------
+-- Structure playground
+
+--synth settings
+--kick
+let (sinfreq, _) = pF "sinfreq" (Just 100)
+let (att, _) = pF "att" (Just 100)
+let (glissf, _) = pF "glissf" (Just 100)
+--hihat
+let (rel, _) = pF "rel" (Just 100)
+let (amp, _) = pF "amp" (Just 100)
+let (ffreq, _) = pI "ffreq" (Just 100)

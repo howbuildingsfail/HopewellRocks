@@ -27,10 +27,14 @@ d1 $ n "12*2" # sound "hihat" # att (slow 14 $ sine1*0.5)  # rel (slow 13 $ sine
 let lp1 = seqPLoop [(0, 16, pp2),(16, 32, pp3),(32, 48, pp4),(48, 64, pp1)]
 let lp2 = seqPLoop [(0,64,phh1),(0,64,psn1),(0,64,lp1)]
 
-
-hush
-
-t1 (mortal 256 32) $  lp2
 cps (-1)
 t1 (mortal 256 32) $  lp2
 cps 1.2
+hush
+
+----
+
+d1  $ slow 0.8 $  n "[-24 -12 0 12]*2 " # sound "snare" # ffreq (slow 5 $ irand 10000) # att (slow 17 $ sine1*0.5) # nudge "[0.4 0]*2" # gain 1.0 # sustain (slow 32 $ scale 0.05 0.2 sine1)
+
+d1 $ sound "cp*4" # nudge (slow 8 $ sine)
+d1 $ spaceOut [1, 0.5, 1.33, 0.1, 2] $ sound "cp*4 cp*9"
